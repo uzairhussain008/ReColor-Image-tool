@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Compatibility patch: ensure window.fetch is writable for extension & iframe wrappers -->
+    <script>
+      (function() {
+        try {
+          var originalFetch = typeof window !== 'undefined' && window.fetch ? window.fetch.bind(window) : null;
+          var currentFetch = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch;
+            },
+            set: function(val) {
+              currentFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (_err) {
+          // If already defined or non-configurable, proceed safely
+        }
+
+        // Global safeguard: suppress non-critical extension or iframe fetch override exceptions
+        if (typeof window !== 'undefined') {
+          window.addEventListener('error', function(event) {
+            var msg = (event && event.message) ? String(event.message) : '';
+            var file = (event && event.filename) ? String(event.filename) : '';
+            if (
+              file.indexOf('chrome-extension://') !== -1 ||
+              msg.indexOf('Cannot set property fetch') !== -1 ||
+              msg.indexOf('which has only a getter') !== -1
+            ) {
+              if (event.preventDefault) event.preventDefault();
+              if (event.stopPropagation) event.stopPropagation();
+              return true;
+            }
+          }, true);
+
+          window.addEventListener('unhandledrejection', function(event) {
+            var reason = event && event.reason;
+            var msg = reason && reason.message ? String(reason.message) : String(reason || '');
+            if (
+              msg.indexOf('Cannot set property fetch') !== -1 ||
+              msg.indexOf('which has only a getter') !== -1
+            ) {
+              if (event.preventDefault) event.preventDefault();
+              if (event.stopPropagation) event.stopPropagation();
+            }
+          }, true);
+        }
+      })();
+    </script>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>ReColor Image – Free Online Image Recolor & Color Tone Editor</title>
+    <meta name="title" content="ReColor Image – Free Online Image Recolor & Color Tone Editor" />
+    <meta name="description" content="Bring new life to your images. Convert, recolor, and transform photos instantly in your browser with real-time presets, duotone effects, selective brush tinting, and high-resolution export." />
+    <meta name="keywords" content="recolor image, image recolor tool, recolor image online, image color changer, colorize image online, black and white to color, convert image to black and white, change color of image, photo color editor, duotone generator" />
+    <meta name="author" content="ReColor Image" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://recolorimage.app/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://recolorimage.app/" />
+    <meta property="og:title" content="ReColor Image – Free Online Image Recolor & Color Tone Editor" />
+    <meta property="og:description" content="Convert, recolor, and transform your photos instantly with browser-based Canvas processing. 100% private, free, and watermark-free." />
+    <meta property="og:image" content="/src/assets/images/hero_sample_photo_1794224583683.jpg" />
+    <meta property="og:site_name" content="ReColor Image" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://recolorimage.app/" />
+    <meta name="twitter:title" content="ReColor Image – Free Online Image Recolor & Color Tone Editor" />
+    <meta name="twitter:description" content="Convert, recolor, and transform your photos instantly with browser-based Canvas processing. 100% private, free, and watermark-free." />
+    <meta name="twitter:image" content="/src/assets/images/hero_sample_photo_1794224583683.jpg" />
+
+    <!-- Webmaster Verification Placeholders -->
+    <!-- <meta name="google-site-verification" content="GOOGLE_SEARCH_CONSOLE_VERIFICATION_TOKEN" /> -->
+    <!-- <meta name="msvalidate.01" content="BING_WEBMASTER_VERIFICATION_TOKEN" /> -->
+
+    <!-- Web Analytics Placeholder (Google Analytics 4 / Privacy-friendly analytics) -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+
+    <!-- JSON-LD Structured Data: WebApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ReColor Image",
+      "url": "https://recolorimage.app/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "description": "Free, browser-based online image recoloring and photo adjustment tool. Features real-time filters, duotone effects, color wash, selective brush recoloring, and lossless HD download.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Client-side HTML5 Canvas processing",
+        "10 Real-time color presets including Duotone, Black & White, and Vintage",
+        "Fine adjustment controls for Brightness, Contrast, Saturation, Hue, Temperature, and Tint",
+        "Interactive Before and After slider comparison",
+        "Full resolution JPG, PNG, and WEBP export with transparency support",
+        "Selective recolor brush and eraser tool",
+        "100% local privacy with zero server uploads"
+      ]
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ReColor Image",
+      "url": "https://recolorimage.app/",
+      "logo": "https://recolorimage.app/logo.png"
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is image recoloring?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Image recoloring is the digital manipulation of color balances, hues, saturation, tints, or tone curves to alter the mood, palette, or selective color of a photograph."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I recolor an image online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply upload your JPG, PNG, or WEBP photo to ReColor Image, choose a curated preset (such as Vintage, Cinematic, or Duotone), fine-tune the color sliders or use the selective brush, and download your edited image in high resolution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my uploaded photos stored on a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. ReColor Image processes all operations entirely within your browser using the HTML5 Canvas API. Your images never leave your device or touch an external server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is ReColor Image free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, ReColor Image is 100% free with no sign-up, no subscriptions, and no watermarks."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="bg-neutral-50 text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
