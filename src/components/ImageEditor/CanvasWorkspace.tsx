@@ -235,12 +235,29 @@ export const CanvasWorkspace: React.FC<CanvasWorkspaceProps> = ({
           ctx.restore();
         }
 
-        // 3. Draw vertical divider bar
+        // 3. Draw vertical divider bar & center circular grip handle
         ctx.save();
         ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = 'rgba(0,0,0,0.3)';
-        ctx.shadowBlur = 6;
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowBlur = 8;
         ctx.fillRect(splitX - 1.5, 0, 3, imgH);
+
+        // Circular handle at vertical center
+        const handleRadius = Math.max(14, Math.min(28, imgH * 0.035));
+        ctx.beginPath();
+        ctx.arc(splitX, imgH / 2, handleRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Grip indicators inside handle
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = Math.max(2, handleRadius * 0.12);
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(splitX - handleRadius * 0.35, imgH / 2 - handleRadius * 0.35);
+        ctx.lineTo(splitX - handleRadius * 0.35, imgH / 2 + handleRadius * 0.35);
+        ctx.moveTo(splitX + handleRadius * 0.35, imgH / 2 - handleRadius * 0.35);
+        ctx.lineTo(splitX + handleRadius * 0.35, imgH / 2 + handleRadius * 0.35);
+        ctx.stroke();
         ctx.restore();
       }
     }
@@ -581,7 +598,7 @@ export const CanvasWorkspace: React.FC<CanvasWorkspaceProps> = ({
               <div
                 className="absolute top-4 pointer-events-none transition-opacity"
                 style={{
-                  left: `${Math.max(16, (splitPos / 100) * 0.8 * 100)}px`,
+                  left: '16px',
                   opacity: splitPos > 15 ? 1 : 0,
                 }}
               >

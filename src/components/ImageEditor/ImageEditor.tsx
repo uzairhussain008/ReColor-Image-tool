@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Dropzone } from './Dropzone';
+import { Hero } from '../Hero';
 import { CanvasWorkspace } from './CanvasWorkspace';
 import { EditorControls } from './EditorControls';
 import {
@@ -17,13 +17,17 @@ import {
   BrushStroke,
   SampleImageItem,
 } from '../../types';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, ArrowLeft, RotateCcw } from 'lucide-react';
 
 interface ImageEditorProps {
   initialSample?: SampleImageItem | null;
+  onClearInitialSample?: () => void;
 }
 
-export const ImageEditor: React.FC<ImageEditorProps> = ({ initialSample }) => {
+export const ImageEditor: React.FC<ImageEditorProps> = ({
+  initialSample,
+  onClearInitialSample,
+}) => {
   const [imageState, setImageState] = useState<ImageDataState | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'info' } | null>(
@@ -211,6 +215,9 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({ initialSample }) => {
   const handleUploadNew = () => {
     setImageState(null);
     setErrorMessage(null);
+    if (onClearInitialSample) {
+      onClearInitialSample();
+    }
   };
 
   const handleBrushToolChange = (tool: BrushTool) => {
@@ -334,108 +341,132 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({ initialSample }) => {
   };
 
   return (
-    <section id="editor" className="py-12 sm:py-16 bg-neutral-100/70 border-b border-neutral-200 scroll-mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Toast alert */}
-        {toastMessage && (
-          <div
-            className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 text-xs font-semibold transition-all ${
-              toastMessage.type === 'success'
-                ? 'bg-neutral-900 text-white border border-neutral-800'
-                : 'bg-white text-neutral-900 border border-neutral-300'
-            }`}
-          >
-            {toastMessage.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-sky-500" />
-            )}
-            <span>{toastMessage.text}</span>
-          </div>
-        )}
-
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-          <div className="text-xs font-semibold text-sky-600 mb-1 tracking-wider uppercase">
-            Easy Online Editor
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
-            Free Photo Color & Tone Editor
-          </h2>
-          <p className="text-sm text-neutral-500 mt-2">
-            Upload your picture, pick a color style, and adjust the tones with instant live preview.
-          </p>
+    <div id="editor" className="scroll-mt-16">
+      {/* Toast alert */}
+      {toastMessage && (
+        <div
+          className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 text-xs font-semibold transition-all ${
+            toastMessage.type === 'success'
+              ? 'bg-neutral-900 text-white border border-neutral-800'
+              : 'bg-white text-neutral-900 border border-neutral-300'
+          }`}
+        >
+          {toastMessage.type === 'success' ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          ) : (
+            <AlertCircle className="w-4 h-4 text-sky-500" />
+          )}
+          <span>{toastMessage.text}</span>
         </div>
+      )}
 
-        {/* View Mode: Dropzone or Active Workspace */}
-        {!imageState ? (
-          <Dropzone
-            onFileSelect={handleFileSelect}
-            onSelectSample={(sample) => loadFromUrl(sample.url, sample.title, sample.recommendedPreset)}
-            errorMessage={errorMessage}
-          />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Column: Canvas & Split Comparison View */}
-            <div className="lg:col-span-8 flex flex-col gap-4">
-              <CanvasWorkspace
-                imageState={imageState}
-                preset={preset}
-                adjustments={adjustments}
-                recolor={recolor}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                brushTool={brushTool}
-                onBrushToolChange={handleBrushToolChange}
-                brushColor={brushColor}
-                brushSize={brushSize}
-                brushOpacity={brushOpacity}
-                brushStrokes={brushStrokes}
-                onAddBrushStroke={handleAddBrushStroke}
-                onUndoBrushStroke={handleUndoBrush}
-                onRedoBrushStroke={handleRedoBrush}
-                canUndoBrush={brushHistoryIndex >= 0}
-                canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
-                onClearBrushStrokes={handleClearBrush}
-                onDownload={handleDownload}
-              />
+      {/* View Mode: Unified Hero Cover (Upload + Color Difference) or Active Editing Studio */}
+      {!imageState ? (
+        <Hero
+          onFileSelect={handleFileSelect}
+          onSelectSample={(sample) =>
+            loadFromUrl(sample.url, sample.title, sample.recommendedPreset)
+          }
+          errorMessage={errorMessage}
+        />
+      ) : (
+        <section className="py-6 sm:py-10 bg-neutral-100/70 border-b border-neutral-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Active Workspace Header Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white p-3.5 sm:p-4 rounded-2xl border border-neutral-200/90 shadow-2xs">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleUploadNew}
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 active:scale-98 rounded-xl transition-all cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Upload Different Photo</span>
+                </button>
+                <div className="h-4 w-px bg-neutral-200 hidden sm:block" />
+                <div className="min-w-0">
+                  <div className="text-xs font-bold text-neutral-900 truncate max-w-[200px] sm:max-w-md">
+                    {imageState.name}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono text-neutral-500 bg-neutral-50 px-2.5 py-1 rounded-lg border border-neutral-200">
+                  {imageState.originalWidth} × {imageState.originalHeight} px
+                </span>
+                <button
+                  onClick={handleResetAll}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset All Edits</span>
+                </button>
+              </div>
             </div>
 
-            {/* Right Column: Tabbed Control Panel */}
-            <div className="lg:col-span-4">
-              <EditorControls
-                currentPreset={preset}
-                onPresetSelect={setPreset}
-                adjustments={adjustments}
-                onAdjustmentChange={handleAdjustmentChange}
-                onResetAdjustment={handleResetAdjustment}
-                onResetAllAdjustments={handleResetAllAdjustments}
-                recolor={recolor}
-                onRecolorChange={handleRecolorChange}
-                onResetRecolor={handleResetRecolor}
-                brushTool={brushTool}
-                onBrushToolChange={handleBrushToolChange}
-                brushColor={brushColor}
-                onBrushColorChange={setBrushColor}
-                brushSize={brushSize}
-                onBrushSizeChange={setBrushSize}
-                brushOpacity={brushOpacity}
-                onBrushOpacityChange={setBrushOpacity}
-                onUndoBrush={handleUndoBrush}
-                onRedoBrush={handleRedoBrush}
-                canUndoBrush={brushHistoryIndex >= 0}
-                canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
-                onClearBrush={handleClearBrush}
-                onDownload={handleDownload}
-                onResetAll={handleResetAll}
-                onUploadNew={handleUploadNew}
-                originalWidth={imageState.originalWidth}
-                originalHeight={imageState.originalHeight}
-              />
+            {/* Canvas and Editor Controls */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Left Column: Canvas & Split Comparison View */}
+              <div className="lg:col-span-8 flex flex-col gap-4">
+                <CanvasWorkspace
+                  imageState={imageState}
+                  preset={preset}
+                  adjustments={adjustments}
+                  recolor={recolor}
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                  brushTool={brushTool}
+                  onBrushToolChange={handleBrushToolChange}
+                  brushColor={brushColor}
+                  brushSize={brushSize}
+                  brushOpacity={brushOpacity}
+                  brushStrokes={brushStrokes}
+                  onAddBrushStroke={handleAddBrushStroke}
+                  onUndoBrushStroke={handleUndoBrush}
+                  onRedoBrushStroke={handleRedoBrush}
+                  canUndoBrush={brushHistoryIndex >= 0}
+                  canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
+                  onClearBrushStrokes={handleClearBrush}
+                  onDownload={handleDownload}
+                />
+              </div>
+
+              {/* Right Column: Tabbed Control Panel */}
+              <div className="lg:col-span-4">
+                <EditorControls
+                  currentPreset={preset}
+                  onPresetSelect={setPreset}
+                  adjustments={adjustments}
+                  onAdjustmentChange={handleAdjustmentChange}
+                  onResetAdjustment={handleResetAdjustment}
+                  onResetAllAdjustments={handleResetAllAdjustments}
+                  recolor={recolor}
+                  onRecolorChange={handleRecolorChange}
+                  onResetRecolor={handleResetRecolor}
+                  brushTool={brushTool}
+                  onBrushToolChange={handleBrushToolChange}
+                  brushColor={brushColor}
+                  onBrushColorChange={setBrushColor}
+                  brushSize={brushSize}
+                  onBrushSizeChange={setBrushSize}
+                  brushOpacity={brushOpacity}
+                  onBrushOpacityChange={setBrushOpacity}
+                  onUndoBrush={handleUndoBrush}
+                  onRedoBrush={handleRedoBrush}
+                  canUndoBrush={brushHistoryIndex >= 0}
+                  canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
+                  onClearBrush={handleClearBrush}
+                  onDownload={handleDownload}
+                  onResetAll={handleResetAll}
+                  onUploadNew={handleUploadNew}
+                  originalWidth={imageState.originalWidth}
+                  originalHeight={imageState.originalHeight}
+                />
+              </div>
             </div>
           </div>
-        )}
-      </div>
-    </section>
+        </section>
+      )}
+    </div>
   );
 };

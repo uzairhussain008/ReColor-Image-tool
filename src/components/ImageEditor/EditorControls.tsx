@@ -432,6 +432,25 @@ export const EditorControls: React.FC<EditorControlsProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Duotone Intensity / Blend Strength Slider */}
+              <div className="space-y-1 pt-1">
+                <div className="flex items-center justify-between text-xs text-neutral-600">
+                  <span>Duotone Blend Strength</span>
+                  <span className="font-mono font-semibold">{recolor.duotoneIntensity ?? 100}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={recolor.duotoneIntensity ?? 100}
+                  onChange={(e) => {
+                    onRecolorChange({ duotoneIntensity: Number(e.target.value) });
+                    onPresetSelect('duotone');
+                  }}
+                  className="w-full accent-neutral-900 cursor-pointer h-1.5 bg-neutral-200 rounded-lg appearance-none"
+                />
+              </div>
             </div>
           </div>
         )}

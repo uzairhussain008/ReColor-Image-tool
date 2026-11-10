@@ -146,3 +146,35 @@ test('all 5 blend modes compute without NaN or out-of-bounds channels', () => {
     assert.ok(b >= 0 && b <= 255, `Blend mode ${mode} b out of bounds: ${b}`);
   }
 });
+
+test('duotone intensity linearly blends between original and duotone mapped colors', () => {
+  const pixel: [number, number, number] = [120, 80, 40];
+  const shadow: [number, number, number] = [0, 10, 50];
+  const highlight: [number, number, number] = [255, 200, 100];
+
+  // At 0% intensity, it should return original pixel
+  const [zeroR, zeroG, zeroB] = applyPresetTransform(pixel[0], pixel[1], pixel[2], 'duotone', shadow, highlight, 0);
+  assert.deepEqual([Math.round(zeroR), Math.round(zeroG), Math.round(zeroB)], pixel);
+
+  // At 50% intensity, it should be between original and 100% duotone
+  const [fullR] = applyPresetTransform(pixel[0], pixel[1], pixel[2], 'duotone', shadow, highlight, 100);
+  const [halfR] = applyPresetTransform(pixel[0], pixel[1], pixel[2], 'duotone', shadow, highlight, 50);
+  assert.ok(Math.abs(halfR - (pixel[0] + fullR) / 2) <= 1);
+});
+
+test('temperature and tint adjust channels symmetrically without NaN', () => {
+  const base: [number, number, number] = [128, 128, 128];
+  
+  // Warm temp should raise R and lower B
+  const [warmR, , warmB] = applyAdjustments(base[0], base[1], base[2], { ...DEFAULT_ADJUSTMENTS, temperature: 50 });
+  assert.ok(warmR > base[0] && warmB < base[2]);
+
+  // Cool temp should lower R and raise B
+  const [coolR, , coolB] = applyAdjustments(base[0], base[1], base[2], { ...DEFAULT_ADJUSTMENTS, temperature: -50 });
+  assert.ok(coolR < base[0] && coolB > base[2]);
+
+  // Magenta tint should lower G and raise R/B
+  const [magR, magG, magB] = applyAdjustments(base[0], base[1], base[2], { ...DEFAULT_ADJUSTMENTS, tint: 50 });
+  assert.ok(magG < base[1] && magR > base[0] && magB > base[2]);
+});
+

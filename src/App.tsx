@@ -5,14 +5,12 @@
 
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
 import { ImageEditor } from './components/ImageEditor/ImageEditor';
 import { AdPlaceholder } from './components/AdPlaceholder';
 import { BeforeAfterGallery } from './components/BeforeAfterGallery';
 import { FeaturesGrid } from './components/FeaturesGrid';
 import { UseCases } from './components/UseCases';
 import { HowItWorks } from './components/HowItWorks';
-import { WhyReColor } from './components/WhyReColor';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { LegalModals, LegalModalType } from './components/LegalModals';
@@ -27,6 +25,8 @@ export default function App() {
     const el = document.getElementById('editor');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -41,26 +41,23 @@ export default function App() {
       <Navbar onStartClick={handleScrollToEditor} />
 
       <main className="flex-1">
-        {/* Section 1: Hero */}
-        <Hero
-          onSelectSample={handleSelectSample}
-          onScrollToEditor={handleScrollToEditor}
+        {/* Top Hero Section: Main Cover with Integrated Image Upload Box & Color Difference Showcase / Active Editor */}
+        <ImageEditor
+          initialSample={selectedSample}
+          onClearInitialSample={() => setSelectedSample(null)}
         />
 
-        {/* Section 2: Main Image Editor (Immediately below hero) */}
-        <ImageEditor initialSample={selectedSample} />
-
-        {/* Monetization Slot 1: Immediately below the image editor */}
+        {/* Monetization Slot 1: Immediately below the top editor area */}
         <AdPlaceholder
           slotId="below-editor"
           slotName="Editor Bottom Banner (Adsterra / Display Ads Slot 1)"
           sizeLabel="Leaderboard (728x90 desktop / 320x50 mobile)"
         />
 
-        {/* Section 3: Before & After Examples */}
+        {/* Section 2: Before & After Examples */}
         <BeforeAfterGallery onLoadExample={handleSelectSample} />
 
-        {/* Section 4: Features */}
+        {/* Section 3: Streamlined Key Capabilities & Advantages */}
         <FeaturesGrid />
 
         {/* Monetization Slot 2: Between content sections */}
@@ -70,16 +67,13 @@ export default function App() {
           sizeLabel="Responsive Billboard (970x250 / 300x250)"
         />
 
-        {/* Section 5: Use Cases */}
-        <UseCases />
-
-        {/* Section 6: How It Works */}
+        {/* Section 4: How It Works */}
         <HowItWorks />
 
-        {/* Section 7: Why ReColor Image? */}
-        <WhyReColor />
+        {/* Section 5: Real-World Use Cases */}
+        <UseCases />
 
-        {/* Section 8: FAQ */}
+        {/* Section 6: FAQ */}
         <FAQ />
 
         {/* Monetization Slot 3: Above footer */}
@@ -90,7 +84,7 @@ export default function App() {
         />
       </main>
 
-      {/* Section 9: Footer */}
+      {/* Section 7: Footer */}
       <Footer onOpenLegal={(type) => setActiveLegalModal(type)} />
 
       {/* Legal & Contact Modals */}
