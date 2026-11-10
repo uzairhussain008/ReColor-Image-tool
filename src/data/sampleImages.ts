@@ -1,15 +1,13 @@
 import { SampleImageItem } from '../types';
-import sampleCoat from '../assets/images/hero_sample_photo_1794224583683.jpg';
-import sampleCar from '../assets/images/sample_retro_car_1794224584123.jpg';
-import sampleFashion from '../assets/images/sample_fashion_model_1794224584790.jpg';
-import sampleFurniture from '../assets/images/sample_interior_furniture_1794224585198.jpg';
 
 export const SAMPLE_IMAGES: SampleImageItem[] = [
   {
     id: 'sample-coat',
     title: 'Cobalt Trench Coat',
     category: 'Fashion & Street',
-    url: sampleCoat,
+    url: '/samples/cobalt-trench-coat.webp',
+    thumbnailUrl: '/samples/cobalt-trench-coat-thumb.webp',
+    mediumUrl: '/samples/cobalt-trench-coat-md.webp',
     fallbackUrl: '/samples/cobalt-trench-coat.jpg',
     recommendedPreset: 'vintage',
   },
@@ -17,7 +15,9 @@ export const SAMPLE_IMAGES: SampleImageItem[] = [
     id: 'sample-car',
     title: 'Vintage Sports Car',
     category: 'Automotive',
-    url: sampleCar,
+    url: '/samples/vintage-sports-car.webp',
+    thumbnailUrl: '/samples/vintage-sports-car-thumb.webp',
+    mediumUrl: '/samples/vintage-sports-car-md.webp',
     fallbackUrl: '/samples/vintage-sports-car.jpg',
     recommendedPreset: 'cinematic',
   },
@@ -25,7 +25,9 @@ export const SAMPLE_IMAGES: SampleImageItem[] = [
     id: 'sample-fashion',
     title: 'Emerald Tailored Blazer',
     category: 'Portrait & Studio',
-    url: sampleFashion,
+    url: '/samples/emerald-tailored-blazer.webp',
+    thumbnailUrl: '/samples/emerald-tailored-blazer-thumb.webp',
+    mediumUrl: '/samples/emerald-tailored-blazer-md.webp',
     fallbackUrl: '/samples/emerald-tailored-blazer.jpg',
     recommendedPreset: 'bw',
   },
@@ -33,7 +35,9 @@ export const SAMPLE_IMAGES: SampleImageItem[] = [
     id: 'sample-furniture',
     title: 'Mustard Lounge Armchair',
     category: 'Interior & Decor',
-    url: sampleFurniture,
+    url: '/samples/mustard-lounge-armchair.webp',
+    thumbnailUrl: '/samples/mustard-lounge-armchair-thumb.webp',
+    mediumUrl: '/samples/mustard-lounge-armchair-md.webp',
     fallbackUrl: '/samples/mustard-lounge-armchair.jpg',
     recommendedPreset: 'duotone',
   },

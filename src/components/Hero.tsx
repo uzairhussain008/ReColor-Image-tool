@@ -150,8 +150,12 @@ export const Hero: React.FC<HeroProps> = ({
                     title={`Load ${sample.title}`}
                   >
                     <img
-                      src={sample.url}
+                      src={sample.thumbnailUrl || sample.url}
                       alt={sample.title}
+                      width={40}
+                      height={40}
+                      loading="eager"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                       onError={(e) => handleImageError(e, sample.fallbackUrl, sample.title)}
                       className="w-10 h-10 rounded-lg object-cover shrink-0 bg-neutral-100 group-hover:scale-105 transition-transform"
@@ -181,12 +185,17 @@ export const Hero: React.FC<HeroProps> = ({
                 </div>
               </div>
 
-              {/* Interactive Split Comparison Card */}
+              {/* Interactive Split Comparison Card - Main LCP Element */}
               <div className="relative aspect-[16/11] rounded-xl overflow-hidden select-none bg-neutral-950 shadow-inner">
                 {/* Recolored sample photo layer (vintage/warm cast) */}
                 <img
                   src={SAMPLE_IMAGES[0].url}
                   alt="Recolored sample preview"
+                  width={688}
+                  height={473}
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                   onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Recolored Preview')}
                   className="absolute inset-0 w-full h-full object-cover filter contrast-110 saturate-125 sepia-[0.35] hue-rotate-15"
@@ -196,6 +205,10 @@ export const Hero: React.FC<HeroProps> = ({
                 <img
                   src={SAMPLE_IMAGES[0].url}
                   alt="Original sample preview"
+                  width={688}
+                  height={473}
+                  loading="eager"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                   onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Original Preview')}
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none"

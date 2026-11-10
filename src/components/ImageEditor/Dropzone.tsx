@@ -108,8 +108,12 @@ export const Dropzone: React.FC<DropzoneProps> = ({
               className="flex items-center gap-3 p-2 bg-white border border-neutral-200 rounded-xl hover:border-neutral-900 hover:shadow-xs transition-all text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
             >
               <img
-                src={sample.url}
+                src={sample.thumbnailUrl || sample.url}
                 alt={sample.title}
+                width={48}
+                height={48}
+                loading="lazy"
+                decoding="async"
                 referrerPolicy="no-referrer"
                 onError={(e) => handleImageError(e, sample.fallbackUrl, sample.title)}
                 className="w-12 h-12 rounded-lg object-cover shrink-0 bg-neutral-100"

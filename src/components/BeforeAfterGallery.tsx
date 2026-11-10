@@ -37,7 +37,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
       title: 'Studio Portrait Monochrome',
       category: 'Color to Black & White',
       description: 'Luminance-weighted grayscale maintaining highlight roll-off and skin tonal separation.',
-      imageUrl: SAMPLE_IMAGES[2].url, // Fashion model
+      imageUrl: SAMPLE_IMAGES[2].mediumUrl || SAMPLE_IMAGES[2].url, // Fashion model
       presetStyleClass: 'grayscale contrast-110',
       originalLabel: 'Natural Color',
       editedLabel: 'B&W Tonal',
@@ -48,7 +48,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
       title: 'Warm Golden Hour Cast',
       category: 'Warm Photo Effect',
       description: 'Amber temperature boost with lifted red/yellow spectrum for sunset richness.',
-      imageUrl: SAMPLE_IMAGES[0].url, // Cobalt coat
+      imageUrl: SAMPLE_IMAGES[0].mediumUrl || SAMPLE_IMAGES[0].url, // Cobalt coat
       presetStyleClass: 'sepia-[0.35] saturate-125 contrast-105',
       originalLabel: 'Daylight Raw',
       editedLabel: 'Golden Cast',
@@ -59,7 +59,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
       title: '70s Film Nostalgia',
       category: 'Vintage Effect',
       description: 'Warm shadow tones, faded contrast, and nostalgic sepia film undertones.',
-      imageUrl: SAMPLE_IMAGES[1].url, // Retro sports car
+      imageUrl: SAMPLE_IMAGES[1].mediumUrl || SAMPLE_IMAGES[1].url, // Retro sports car
       presetStyleClass: 'sepia-[0.5] contrast-95 brightness-105 saturate-90',
       originalLabel: 'Modern Clean',
       editedLabel: '70s Film Fade',
@@ -70,7 +70,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
       title: 'Cool Marine Architecture',
       category: 'Cool Color Effect',
       description: 'Clean azure and cyan temperature attenuation for modern minimalist sharpness.',
-      imageUrl: SAMPLE_IMAGES[0].url,
+      imageUrl: SAMPLE_IMAGES[0].mediumUrl || SAMPLE_IMAGES[0].url,
       presetStyleClass: 'hue-rotate-15 contrast-105 brightness-95 saturate-110',
       originalLabel: 'Standard Warm',
       editedLabel: 'Cool Azure',
@@ -81,7 +81,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
       title: 'Cyberpunk Duotone Gradient',
       category: 'Duotone Two-Tone',
       description: 'Shadow mapping to deep obsidian navy and highlights to electric ultraviolet.',
-      imageUrl: SAMPLE_IMAGES[3].url, // Lounge armchair
+      imageUrl: SAMPLE_IMAGES[3].mediumUrl || SAMPLE_IMAGES[3].url, // Lounge armchair
       presetStyleClass: 'invert-[0.1] contrast-125 saturate-150 hue-rotate-[240deg]',
       originalLabel: 'Natural Living Room',
       editedLabel: 'Electric Duotone',
@@ -92,7 +92,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
       title: 'Cinematic Teal & Orange',
       category: 'Cinematic Color Grade',
       description: 'Moody teal shadow split contrasting with rich amber highlights in classic Hollywood grading.',
-      imageUrl: SAMPLE_IMAGES[1].url,
+      imageUrl: SAMPLE_IMAGES[1].mediumUrl || SAMPLE_IMAGES[1].url,
       presetStyleClass: 'contrast-115 saturate-130 brightness-95',
       originalLabel: 'Studio Raw',
       editedLabel: 'Teal & Orange',
@@ -136,6 +136,10 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
                   <img
                     src={item.imageUrl}
                     alt={`${item.title} edited`}
+                    width={600}
+                    height={450}
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                     onError={(e) => handleImageError(e, item.recommendedSample.fallbackUrl, `${item.title} edited`)}
                     className={`absolute inset-0 w-full h-full object-cover ${item.presetStyleClass}`}
@@ -145,6 +149,10 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
                   <img
                     src={item.imageUrl}
                     alt={`${item.title} original`}
+                    width={600}
+                    height={450}
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                     onError={(e) => handleImageError(e, item.recommendedSample.fallbackUrl, `${item.title} original`)}
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"

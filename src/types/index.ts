@@ -35,5 +35,7 @@ export interface SampleImageItem {
   category: string;
   url: string;
   fallbackUrl?: string;
+  thumbnailUrl?: string;
+  mediumUrl?: string;
   recommendedPreset: PresetId;
 }
