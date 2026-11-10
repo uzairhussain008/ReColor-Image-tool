@@ -1,0 +1,16 @@
+<svg width="240" height="48" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="recolorGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="50%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="32" height="32" rx="8" fill="#0F172A"/>
+  <circle cx="16" cy="21" r="6" fill="#8B5CF6" fill-opacity="0.88" />
+  <circle cx="24" cy="21" r="6" fill="#EC4899" fill-opacity="0.88" />
+  <circle cx="20" cy="27" r="6" fill="#0EA5E9" fill-opacity="0.88" />
+  <circle cx="20" cy="23.5" r="2.5" fill="#FFFFFF" fill-opacity="0.98" />
+  <text x="48" y="30" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="800" fill="url(#recolorGrad)">ReColor</text>
+  <text x="130" y="30" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700" fill="#0F172A">Image</text>
+</svg>

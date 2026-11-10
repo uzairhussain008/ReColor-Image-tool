@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SlidersHorizontal, ArrowRight } from 'lucide-react';
 import { SAMPLE_IMAGES } from '../data/sampleImages';
 import { SampleImageItem } from '../types';
+import { handleImageError } from '../utils/imageFallback';
 
 interface GalleryExample {
   id: string;
@@ -136,6 +137,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
                     src={item.imageUrl}
                     alt={`${item.title} edited`}
                     referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, item.recommendedSample.fallbackUrl, `${item.title} edited`)}
                     className={`absolute inset-0 w-full h-full object-cover ${item.presetStyleClass}`}
                   />
 
@@ -144,6 +146,7 @@ export const BeforeAfterGallery: React.FC<BeforeAfterGalleryProps> = ({ onLoadEx
                     src={item.imageUrl}
                     alt={`${item.title} original`}
                     referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, item.recommendedSample.fallbackUrl, `${item.title} original`)}
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
                   />

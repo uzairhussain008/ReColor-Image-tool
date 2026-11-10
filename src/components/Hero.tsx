@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { SAMPLE_IMAGES } from '../data/sampleImages';
 import { SampleImageItem } from '../types';
+import { handleImageError } from '../utils/imageFallback';
 
 interface HeroProps {
   onFileSelect: (file: File) => void;
@@ -152,6 +153,7 @@ export const Hero: React.FC<HeroProps> = ({
                       src={sample.url}
                       alt={sample.title}
                       referrerPolicy="no-referrer"
+                      onError={(e) => handleImageError(e, sample.fallbackUrl, sample.title)}
                       className="w-10 h-10 rounded-lg object-cover shrink-0 bg-neutral-100 group-hover:scale-105 transition-transform"
                     />
                     <div className="min-w-0">
@@ -186,6 +188,7 @@ export const Hero: React.FC<HeroProps> = ({
                   src={SAMPLE_IMAGES[0].url}
                   alt="Recolored sample preview"
                   referrerPolicy="no-referrer"
+                  onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Recolored Preview')}
                   className="absolute inset-0 w-full h-full object-cover filter contrast-110 saturate-125 sepia-[0.35] hue-rotate-15"
                 />
 
@@ -194,6 +197,7 @@ export const Hero: React.FC<HeroProps> = ({
                   src={SAMPLE_IMAGES[0].url}
                   alt="Original sample preview"
                   referrerPolicy="no-referrer"
+                  onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Original Preview')}
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                 />

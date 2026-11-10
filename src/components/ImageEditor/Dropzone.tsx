@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Upload, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { SAMPLE_IMAGES } from '../../data/sampleImages';
 import { SampleImageItem } from '../../types';
+import { handleImageError } from '../../utils/imageFallback';
 
 interface DropzoneProps {
   onFileSelect: (file: File) => void;
@@ -110,6 +111,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
                 src={sample.url}
                 alt={sample.title}
                 referrerPolicy="no-referrer"
+                onError={(e) => handleImageError(e, sample.fallbackUrl, sample.title)}
                 className="w-12 h-12 rounded-lg object-cover shrink-0 bg-neutral-100"
               />
               <div className="min-w-0">

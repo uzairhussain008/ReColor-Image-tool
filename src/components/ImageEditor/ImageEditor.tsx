@@ -18,6 +18,7 @@ import {
   SampleImageItem,
 } from '../../types';
 import { CheckCircle2, AlertCircle, ArrowLeft, RotateCcw } from 'lucide-react';
+import { createFallbackCanvas } from '../../utils/imageFallback';
 
 interface ImageEditorProps {
   initialSample?: SampleImageItem | null;
@@ -56,43 +57,81 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({
     return () => clearTimeout(timer);
   }, [toastMessage]);
 
-  // Load sample image
-  const loadFromUrl = useCallback((url: string, name: string, defaultPreset: PresetId = 'original') => {
-    setErrorMessage(null);
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      setImageState({
-        imageElement: img,
-        sourceUrl: url,
-        name: name.replace(/\.[^/.]+$/, ''),
-        type: 'image/jpeg',
-        originalWidth: img.naturalWidth || img.width,
-        originalHeight: img.naturalHeight || img.height,
-        fileSizeBytes: 0,
-        isTransparentPng: false,
-      });
-      setPreset(defaultPreset);
-      setAdjustments(DEFAULT_ADJUSTMENTS);
-      setRecolor(DEFAULT_RECOLOR);
-      setBrushStrokes([]);
-      setBrushHistory([]);
-      setBrushHistoryIndex(-1);
-      setToastMessage({
-        text: `Loaded ${name} (${img.naturalWidth || img.width} × ${img.naturalHeight || img.height} px)`,
-        type: 'success',
-      });
-    };
-    img.onerror = () => {
-      setErrorMessage('Failed to load image. Please select a valid local image file.');
-    };
-    img.src = url;
-  }, []);
+  // Load sample image with multi-tier fallback resilience
+  const loadFromUrl = useCallback(
+    (url: string, name: string, defaultPreset: PresetId = 'original', fallbackUrl?: string) => {
+      setErrorMessage(null);
+
+      const applyLoadedImage = (img: HTMLImageElement, effectiveUrl: string) => {
+        setImageState({
+          imageElement: img,
+          sourceUrl: effectiveUrl,
+          name: name.replace(/\.[^/.]+$/, ''),
+          type: 'image/jpeg',
+          originalWidth: img.naturalWidth || img.width || 1200,
+          originalHeight: img.naturalHeight || img.height || 800,
+          fileSizeBytes: 0,
+          isTransparentPng: false,
+        });
+        setPreset(defaultPreset);
+        setAdjustments(DEFAULT_ADJUSTMENTS);
+        setRecolor(DEFAULT_RECOLOR);
+        setBrushStrokes([]);
+        setBrushHistory([]);
+        setBrushHistoryIndex(-1);
+        setToastMessage({
+          text: `Loaded ${name} (${img.naturalWidth || img.width} × ${img.naturalHeight || img.height} px)`,
+          type: 'success',
+        });
+      };
+
+      const tryFallbackCanvas = () => {
+        try {
+          const fallbackCanvas = createFallbackCanvas(name, 1200, 800);
+          const fallbackImg = new Image();
+          fallbackImg.onload = () => applyLoadedImage(fallbackImg, fallbackCanvas.toDataURL());
+          fallbackImg.src = fallbackCanvas.toDataURL();
+        } catch (_err) {
+          setErrorMessage('Failed to decode image. Please select another photo from your device.');
+        }
+      };
+
+      const tryFallbackUrl = () => {
+        if (fallbackUrl && fallbackUrl !== url) {
+          const fbImg = new Image();
+          fbImg.onload = () => applyLoadedImage(fbImg, fallbackUrl);
+          fbImg.onerror = () => tryFallbackCanvas();
+          fbImg.src = fallbackUrl;
+        } else {
+          tryFallbackCanvas();
+        }
+      };
+
+      const tryWithoutCors = () => {
+        const plainImg = new Image();
+        plainImg.onload = () => applyLoadedImage(plainImg, url);
+        plainImg.onerror = () => tryFallbackUrl();
+        plainImg.src = url;
+      };
+
+      const primaryImg = new Image();
+      primaryImg.crossOrigin = 'anonymous';
+      primaryImg.onload = () => applyLoadedImage(primaryImg, url);
+      primaryImg.onerror = () => tryWithoutCors();
+      primaryImg.src = url;
+    },
+    []
+  );
 
   // Listen to external sample selection from Hero
   useEffect(() => {
     if (initialSample) {
-      loadFromUrl(initialSample.url, initialSample.title, initialSample.recommendedPreset);
+      loadFromUrl(
+        initialSample.url,
+        initialSample.title,
+        initialSample.recommendedPreset,
+        initialSample.fallbackUrl
+      );
     }
   }, [initialSample, loadFromUrl]);
 
