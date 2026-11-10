@@ -6,10 +6,11 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Navbar } from './components/Navbar';
 import { ImageEditor } from './components/ImageEditor/ImageEditor';
+import { DeferredSection } from './components/DeferredSection';
 import type { LegalModalType } from './components/LegalModals';
 import { SampleImageItem } from './types';
 
-// Code-split below-the-fold components to reduce initial JavaScript payload by >150 KiB
+// Code-split below-the-fold components
 const BeforeAfterGallery = lazy(() =>
   import('./components/BeforeAfterGallery').then((m) => ({ default: m.BeforeAfterGallery }))
 );
@@ -68,58 +69,83 @@ export default function App() {
           onClearInitialSample={() => setSelectedSample(null)}
         />
 
-        <Suspense fallback={<div className="h-24" />}>
-          {/* Monetization Slot 1: Immediately below the top editor area */}
-          <AdPlaceholder
-            slotId="below-editor"
-            slotName="Editor Bottom Banner (Adsterra / Display Ads Slot 1)"
-            sizeLabel="Leaderboard (728x90 desktop / 320x50 mobile)"
-          />
+        {/* Deferred Sections: Loaded on viewport intersection to dramatically improve mobile Speed Index */}
+        <DeferredSection fallback={<div className="h-24" />}>
+          <Suspense fallback={<div className="h-24" />}>
+            <AdPlaceholder
+              slotId="below-editor"
+              slotName="Editor Bottom Banner (Adsterra / Display Ads Slot 1)"
+              sizeLabel="Leaderboard (728x90 desktop / 320x50 mobile)"
+            />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Section 2: Before & After Examples */}
-          <BeforeAfterGallery onLoadExample={handleSelectSample} />
+        <DeferredSection sectionId="examples" fallback={<div className="h-96" />}>
+          <Suspense fallback={<div className="h-96" />}>
+            <BeforeAfterGallery onLoadExample={handleSelectSample} />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Section 3: Streamlined Key Capabilities & Advantages */}
-          <FeaturesGrid />
+        <DeferredSection sectionId="features" fallback={<div className="h-80" />}>
+          <Suspense fallback={<div className="h-80" />}>
+            <FeaturesGrid />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Monetization Slot 2: Between content sections */}
-          <AdPlaceholder
-            slotId="between-sections"
-            slotName="In-Feed Content Banner (Adsterra / Display Ads Slot 2)"
-            sizeLabel="Responsive Billboard (970x250 / 300x250)"
-          />
+        <DeferredSection fallback={<div className="h-32" />}>
+          <Suspense fallback={<div className="h-32" />}>
+            <AdPlaceholder
+              slotId="between-sections"
+              slotName="In-Feed Content Banner (Adsterra / Display Ads Slot 2)"
+              sizeLabel="Responsive Billboard (970x250 / 300x250)"
+            />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Section 4: How It Works */}
-          <HowItWorks />
+        <DeferredSection sectionId="how-it-works" fallback={<div className="h-80" />}>
+          <Suspense fallback={<div className="h-80" />}>
+            <HowItWorks />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Section 5: Real-World Use Cases */}
-          <UseCases />
+        <DeferredSection sectionId="use-cases" fallback={<div className="h-96" />}>
+          <Suspense fallback={<div className="h-96" />}>
+            <UseCases />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Section 6: FAQ */}
-          <FAQ />
+        <DeferredSection sectionId="faq" fallback={<div className="h-80" />}>
+          <Suspense fallback={<div className="h-80" />}>
+            <FAQ />
+          </Suspense>
+        </DeferredSection>
 
-          {/* Monetization Slot 3: Above footer */}
-          <AdPlaceholder
-            slotId="above-footer"
-            slotName="Pre-Footer Leaderboard (Adsterra / Display Ads Slot 3)"
-            sizeLabel="Bottom Leaderboard (728x90 / 320x50)"
-          />
-        </Suspense>
+        <DeferredSection fallback={<div className="h-24" />}>
+          <Suspense fallback={<div className="h-24" />}>
+            <AdPlaceholder
+              slotId="above-footer"
+              slotName="Pre-Footer Leaderboard (Adsterra / Display Ads Slot 3)"
+              sizeLabel="Bottom Leaderboard (728x90 / 320x50)"
+            />
+          </Suspense>
+        </DeferredSection>
       </main>
 
-      <Suspense fallback={null}>
-        {/* Section 7: Footer */}
-        <Footer onOpenLegal={(type) => setActiveLegalModal(type)} />
+      <DeferredSection fallback={<div className="h-64" />}>
+        <Suspense fallback={null}>
+          {/* Section 7: Footer */}
+          <Footer onOpenLegal={(type) => setActiveLegalModal(type)} />
 
-        {/* Legal & Contact Modals */}
-        <LegalModals
-          activeModal={activeLegalModal}
-          onClose={() => setActiveLegalModal(null)}
-        />
+          {/* Legal & Contact Modals */}
+          <LegalModals
+            activeModal={activeLegalModal}
+            onClose={() => setActiveLegalModal(null)}
+          />
 
-        {/* Privacy-Friendly Cookie Consent */}
-        <CookieConsent />
-      </Suspense>
+          {/* Privacy-Friendly Cookie Consent */}
+          <CookieConsent />
+        </Suspense>
+      </DeferredSection>
     </div>
   );
 }

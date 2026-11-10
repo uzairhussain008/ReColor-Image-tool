@@ -59,9 +59,9 @@ export const Hero: React.FC<HeroProps> = ({
   };
 
   return (
-    <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 border-b border-neutral-200/70 bg-gradient-to-b from-white via-neutral-50/50 to-neutral-100/40">
+    <section className="relative pt-4 pb-8 sm:pt-10 sm:pb-16 border-b border-neutral-200/70 bg-gradient-to-b from-white via-neutral-50/50 to-neutral-100/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-start">
           {/* Left Column: Headline & Integrated Image Upload Box */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             {/* Trust badge */}
@@ -190,6 +190,8 @@ export const Hero: React.FC<HeroProps> = ({
                 {/* Recolored sample photo layer (vintage/warm cast) */}
                 <img
                   src={SAMPLE_IMAGES[0].url}
+                  srcSet={`${SAMPLE_IMAGES[0].mediumUrl || '/samples/cobalt-trench-coat-md.webp'} 600w, ${SAMPLE_IMAGES[0].url} 1376w`}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 688px"
                   alt="Recolored sample preview"
                   width={688}
                   height={473}
@@ -204,6 +206,8 @@ export const Hero: React.FC<HeroProps> = ({
                 {/* Original sample photo layer (clipped precisely by slider) */}
                 <img
                   src={SAMPLE_IMAGES[0].url}
+                  srcSet={`${SAMPLE_IMAGES[0].mediumUrl || '/samples/cobalt-trench-coat-md.webp'} 600w, ${SAMPLE_IMAGES[0].url} 1376w`}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 688px"
                   alt="Original sample preview"
                   width={688}
                   height={473}

@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* Mobile rendering optimization: isolate off-screen layout and paint */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
+}
+
+/* Speed optimization for text rendering */
+html {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hardware accelerated transitions for mobile touch */
+input[type="range"] {
+  touch-action: pan-y;
+}
