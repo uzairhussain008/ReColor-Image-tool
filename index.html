@@ -183,9 +183,208 @@
       ]
     }
     </script>
+    <!-- Critical Above-the-Fold Layout Styles for Instant Mobile First Paint & Speed Index -->
+    <style>
+      :root {
+        --sk-bg: #fafafa;
+        --sk-border: rgba(229, 229, 229, 0.8);
+        --sk-text: #171717;
+        --sk-muted: #525252;
+      }
+      body {
+        margin: 0;
+        background-color: var(--sk-bg);
+        color: var(--sk-text);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .sk-shell {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .sk-nav {
+        height: 64px;
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid var(--sk-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        max-width: 1280px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .sk-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 18px;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--sk-text);
+      }
+      .sk-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 12px;
+        background: #0a0a0a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        box-sizing: border-box;
+      }
+      .sk-gradient-text {
+        background: linear-gradient(to right, #8B5CF6, #EC4899, #0EA5E9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+      }
+      .sk-cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        background: #171717;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+      }
+      .sk-hero {
+        padding: 16px 16px 32px;
+        max-width: 1280px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .sk-trust {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #737373;
+        margin-bottom: 12px;
+      }
+      .sk-trust-green {
+        color: #047857;
+        font-weight: 600;
+      }
+      .sk-h1 {
+        font-size: clamp(28px, 6vw, 48px);
+        font-weight: 800;
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        margin: 0 0 12px;
+        color: var(--sk-text);
+      }
+      .sk-sub {
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--sk-muted);
+        margin: 0 0 24px;
+        max-width: 640px;
+      }
+      .sk-box {
+        border: 2px dashed #d4d4d4;
+        border-radius: 16px;
+        padding: 24px 16px;
+        text-align: center;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .sk-box-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #f5f5f5;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sk-box-h {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: var(--sk-text);
+      }
+      .sk-box-p {
+        font-size: 12px;
+        color: #737373;
+        margin-bottom: 16px;
+      }
+      .sk-box-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        background: #171717;
+        border-radius: 12px;
+        border: none;
+      }
+    </style>
   </head>
   <body class="bg-neutral-50 text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white">
-    <div id="root"></div>
+    <div id="root">
+      <div class="sk-shell">
+        <header class="sk-nav">
+          <div class="sk-brand">
+            <span class="sk-logo">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20" aria-hidden="true">
+                <circle cx="9" cy="10" r="5" fill="#8B5CF6" fill-opacity="0.85" />
+                <circle cx="15" cy="10" r="5" fill="#EC4899" fill-opacity="0.85" />
+                <circle cx="12" cy="15" r="5" fill="#0EA5E9" fill-opacity="0.85" />
+                <circle cx="12" cy="12" r="2.2" fill="#FFFFFF" fill-opacity="0.95" />
+              </svg>
+            </span>
+            <span><span class="sk-gradient-text">ReColor</span> Image</span>
+          </div>
+          <button class="sk-cta-btn" type="button">Start Recoloring</button>
+        </header>
+
+        <section class="sk-hero">
+          <div class="sk-trust">
+            <span class="sk-trust-green">✓ 100% Free &amp; Private</span>
+            <span>·</span>
+            <span>No Sign-Up Needed</span>
+            <span>·</span>
+            <span>Runs in Your Browser</span>
+          </div>
+
+          <h1 class="sk-h1">Bring New Life to Your Images</h1>
+          <p class="sk-sub">
+            Convert, recolor, and transform your photos instantly. Apply studio color styles,
+            fine-tune color tones, or paint specific parts with an easy brush—100% privately on your device.
+          </p>
+
+          <div class="sk-box">
+            <div class="sk-box-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#525252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <div class="sk-box-h">Drag and drop your image here</div>
+            <div class="sk-box-p">Supports JPG, PNG, and WEBP · Up to 25MB · Processed in high resolution</div>
+            <div class="sk-box-cta">Browse Photo from Device</div>
+          </div>
+        </section>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
