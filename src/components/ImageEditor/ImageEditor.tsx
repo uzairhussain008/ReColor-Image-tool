@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { Hero } from '../Hero';
-import { CanvasWorkspace } from './CanvasWorkspace';
-import { EditorControls } from './EditorControls';
 import {
   PresetId,
   ImageAdjustments,
@@ -19,6 +17,19 @@ import {
 } from '../../types';
 import { CheckCircle2, AlertCircle, ArrowLeft, RotateCcw } from 'lucide-react';
 import { createFallbackCanvas } from '../../utils/imageFallback';
+
+// Dynamic code-splitting for active studio: only loaded when an image is selected/uploaded
+const CanvasWorkspace = lazy(() =>
+  import('./CanvasWorkspace').then((m) => ({ default: m.CanvasWorkspace }))
+);
+const EditorControls = lazy(() =>
+  import('./EditorControls').then((m) => ({ default: m.EditorControls }))
+);
+
+const prefetchStudioModules = () => {
+  import('./CanvasWorkspace');
+  import('./EditorControls');
+};
 
 interface ImageEditorProps {
   initialSample?: SampleImageItem | null;
@@ -407,6 +418,7 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({
             loadFromUrl(sample.url, sample.title, sample.recommendedPreset)
           }
           errorMessage={errorMessage}
+          onPrefetchStudio={prefetchStudioModules}
         />
       ) : (
         <section className="py-6 sm:py-10 bg-neutral-100/70 border-b border-neutral-200">
@@ -443,66 +455,77 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({
               </div>
             </div>
 
-            {/* Canvas and Editor Controls */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              {/* Left Column: Canvas & Split Comparison View */}
-              <div className="lg:col-span-8 flex flex-col gap-4">
-                <CanvasWorkspace
-                  imageState={imageState}
-                  preset={preset}
-                  adjustments={adjustments}
-                  recolor={recolor}
-                  viewMode={viewMode}
-                  onViewModeChange={setViewMode}
-                  brushTool={brushTool}
-                  onBrushToolChange={handleBrushToolChange}
-                  brushColor={brushColor}
-                  brushSize={brushSize}
-                  brushOpacity={brushOpacity}
-                  brushStrokes={brushStrokes}
-                  onAddBrushStroke={handleAddBrushStroke}
-                  onUndoBrushStroke={handleUndoBrush}
-                  onRedoBrushStroke={handleRedoBrush}
-                  canUndoBrush={brushHistoryIndex >= 0}
-                  canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
-                  onClearBrushStrokes={handleClearBrush}
-                  onDownload={handleDownload}
-                />
-              </div>
+            {/* Canvas and Editor Controls with Suspense */}
+            <Suspense
+              fallback={
+                <div className="min-h-[460px] flex flex-col items-center justify-center bg-white rounded-2xl border border-neutral-200 shadow-sm p-8 text-center">
+                  <div className="w-8 h-8 rounded-full border-2 border-neutral-300 border-t-neutral-900 animate-spin mb-3" />
+                  <div className="text-xs font-semibold text-neutral-800">
+                    Initializing High-Resolution Canvas Studio...
+                  </div>
+                </div>
+              }
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                {/* Left Column: Canvas & Split Comparison View */}
+                <div className="lg:col-span-8 flex flex-col gap-4">
+                  <CanvasWorkspace
+                    imageState={imageState}
+                    preset={preset}
+                    adjustments={adjustments}
+                    recolor={recolor}
+                    viewMode={viewMode}
+                    onViewModeChange={setViewMode}
+                    brushTool={brushTool}
+                    onBrushToolChange={handleBrushToolChange}
+                    brushColor={brushColor}
+                    brushSize={brushSize}
+                    brushOpacity={brushOpacity}
+                    brushStrokes={brushStrokes}
+                    onAddBrushStroke={handleAddBrushStroke}
+                    onUndoBrushStroke={handleUndoBrush}
+                    onRedoBrushStroke={handleRedoBrush}
+                    canUndoBrush={brushHistoryIndex >= 0}
+                    canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
+                    onClearBrushStrokes={handleClearBrush}
+                    onDownload={handleDownload}
+                  />
+                </div>
 
-              {/* Right Column: Tabbed Control Panel */}
-              <div className="lg:col-span-4">
-                <EditorControls
-                  currentPreset={preset}
-                  onPresetSelect={setPreset}
-                  adjustments={adjustments}
-                  onAdjustmentChange={handleAdjustmentChange}
-                  onResetAdjustment={handleResetAdjustment}
-                  onResetAllAdjustments={handleResetAllAdjustments}
-                  recolor={recolor}
-                  onRecolorChange={handleRecolorChange}
-                  onResetRecolor={handleResetRecolor}
-                  brushTool={brushTool}
-                  onBrushToolChange={handleBrushToolChange}
-                  brushColor={brushColor}
-                  onBrushColorChange={setBrushColor}
-                  brushSize={brushSize}
-                  onBrushSizeChange={setBrushSize}
-                  brushOpacity={brushOpacity}
-                  onBrushOpacityChange={setBrushOpacity}
-                  onUndoBrush={handleUndoBrush}
-                  onRedoBrush={handleRedoBrush}
-                  canUndoBrush={brushHistoryIndex >= 0}
-                  canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
-                  onClearBrush={handleClearBrush}
-                  onDownload={handleDownload}
-                  onResetAll={handleResetAll}
-                  onUploadNew={handleUploadNew}
-                  originalWidth={imageState.originalWidth}
-                  originalHeight={imageState.originalHeight}
-                />
+                {/* Right Column: Tabbed Control Panel */}
+                <div className="lg:col-span-4">
+                  <EditorControls
+                    currentPreset={preset}
+                    onPresetSelect={setPreset}
+                    adjustments={adjustments}
+                    onAdjustmentChange={handleAdjustmentChange}
+                    onResetAdjustment={handleResetAdjustment}
+                    onResetAllAdjustments={handleResetAllAdjustments}
+                    recolor={recolor}
+                    onRecolorChange={handleRecolorChange}
+                    onResetRecolor={handleResetRecolor}
+                    brushTool={brushTool}
+                    onBrushToolChange={handleBrushToolChange}
+                    brushColor={brushColor}
+                    onBrushColorChange={setBrushColor}
+                    brushSize={brushSize}
+                    onBrushSizeChange={setBrushSize}
+                    brushOpacity={brushOpacity}
+                    onBrushOpacityChange={setBrushOpacity}
+                    onUndoBrush={handleUndoBrush}
+                    onRedoBrush={handleRedoBrush}
+                    canUndoBrush={brushHistoryIndex >= 0}
+                    canRedoBrush={brushHistoryIndex < brushHistory.length - 1}
+                    onClearBrush={handleClearBrush}
+                    onDownload={handleDownload}
+                    onResetAll={handleResetAll}
+                    onUploadNew={handleUploadNew}
+                    originalWidth={imageState.originalWidth}
+                    originalHeight={imageState.originalHeight}
+                  />
+                </div>
               </div>
-            </div>
+            </Suspense>
           </div>
         </section>
       )}

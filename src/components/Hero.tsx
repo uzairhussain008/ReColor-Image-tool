@@ -17,12 +17,14 @@ interface HeroProps {
   onFileSelect: (file: File) => void;
   onSelectSample: (sample: SampleImageItem) => void;
   errorMessage?: string | null;
+  onPrefetchStudio?: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
   onFileSelect,
   onSelectSample,
   errorMessage,
+  onPrefetchStudio,
 }) => {
   const [sliderPos, setSliderPos] = useState(52);
   const [isDragging, setIsDragging] = useState(false);
@@ -98,6 +100,8 @@ export const Hero: React.FC<HeroProps> = ({
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
+              onMouseEnter={onPrefetchStudio}
+              onTouchStart={onPrefetchStudio}
               className={`w-full relative border-2 border-dashed rounded-2xl p-6 sm:p-7 text-center cursor-pointer transition-all ${
                 isDragging
                   ? 'border-neutral-900 bg-neutral-100 scale-[1.01]'
@@ -146,6 +150,8 @@ export const Hero: React.FC<HeroProps> = ({
                   <button
                     key={sample.id}
                     onClick={() => onSelectSample(sample)}
+                    onMouseEnter={onPrefetchStudio}
+                    onTouchStart={onPrefetchStudio}
                     className="flex items-center gap-2.5 p-2 bg-white border border-neutral-200 rounded-xl hover:border-neutral-900 hover:shadow-xs transition-all text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
                     title={`Load ${sample.title}`}
                   >
@@ -154,7 +160,7 @@ export const Hero: React.FC<HeroProps> = ({
                       alt={sample.title}
                       width={40}
                       height={40}
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                       referrerPolicy="no-referrer"
                       onError={(e) => handleImageError(e, sample.fallbackUrl, sample.title)}
@@ -188,36 +194,48 @@ export const Hero: React.FC<HeroProps> = ({
               {/* Interactive Split Comparison Card - Main LCP Element */}
               <div className="relative aspect-[16/11] rounded-xl overflow-hidden select-none bg-neutral-950 shadow-inner">
                 {/* Recolored sample photo layer (vintage/warm cast) */}
-                <img
-                  src={SAMPLE_IMAGES[0].url}
-                  srcSet={`${SAMPLE_IMAGES[0].mediumUrl || '/samples/cobalt-trench-coat-md.webp'} 600w, ${SAMPLE_IMAGES[0].url} 1376w`}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 688px"
-                  alt="Recolored sample preview"
-                  width={688}
-                  height={473}
-                  fetchPriority="high"
-                  loading="eager"
-                  decoding="async"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Recolored Preview')}
-                  className="absolute inset-0 w-full h-full object-cover filter contrast-110 saturate-125 sepia-[0.35] hue-rotate-15"
-                />
+                <picture className="absolute inset-0 w-full h-full">
+                  <source
+                    media="(max-width: 1023px)"
+                    srcSet={SAMPLE_IMAGES[0].mediumUrl || '/samples/cobalt-trench-coat-md.webp'}
+                    type="image/webp"
+                  />
+                  <img
+                    src={SAMPLE_IMAGES[0].url}
+                    alt="Recolored sample preview"
+                    width={688}
+                    height={473}
+                    fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Recolored Preview')}
+                    className="w-full h-full object-cover filter contrast-110 saturate-125 sepia-[0.35] hue-rotate-15"
+                  />
+                </picture>
 
                 {/* Original sample photo layer (clipped precisely by slider) */}
-                <img
-                  src={SAMPLE_IMAGES[0].url}
-                  srcSet={`${SAMPLE_IMAGES[0].mediumUrl || '/samples/cobalt-trench-coat-md.webp'} 600w, ${SAMPLE_IMAGES[0].url} 1376w`}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 688px"
-                  alt="Original sample preview"
-                  width={688}
-                  height={473}
-                  loading="eager"
-                  decoding="async"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Original Preview')}
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                <picture
+                  className="absolute inset-0 w-full h-full pointer-events-none"
                   style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
-                />
+                >
+                  <source
+                    media="(max-width: 1023px)"
+                    srcSet={SAMPLE_IMAGES[0].mediumUrl || '/samples/cobalt-trench-coat-md.webp'}
+                    type="image/webp"
+                  />
+                  <img
+                    src={SAMPLE_IMAGES[0].url}
+                    alt="Original sample preview"
+                    width={688}
+                    height={473}
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, SAMPLE_IMAGES[0].fallbackUrl, 'Original Preview')}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
 
                 {/* Top Labels */}
                 <div
