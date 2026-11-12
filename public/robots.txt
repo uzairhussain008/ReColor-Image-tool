@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://recolorimage.app/sitemap.xml
+Sitemap: https://recolorimage.ai.studio/sitemap.xml
