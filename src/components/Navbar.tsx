@@ -8,11 +8,11 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onStartClick }) => {
   return (
     <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-neutral-200/80 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4 lg:gap-8">
         {/* Zone 1: Single text element wordmark with minimal recolor logo and colorful soft gradient */}
         <a
           href="#"
-          className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-neutral-900 whitespace-nowrap shrink-0 group"
+          className="flex items-center gap-2 sm:gap-2.5 text-base sm:text-lg font-bold tracking-tight text-neutral-900 whitespace-nowrap shrink-0 group"
           aria-label="ReColor Image Home"
         >
           {/* Minimal ReColor Logo Icon */}
@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStartClick }) => {
               <circle cx="12" cy="12" r="2.2" fill="#FFFFFF" fillOpacity="0.95" />
             </svg>
           </span>
-          <span className="tracking-tight text-lg">
+          <span className="tracking-tight text-base sm:text-lg">
             <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-sky-500 bg-clip-text text-transparent font-extrabold">
               ReColor
             </span>{' '}
@@ -39,7 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStartClick }) => {
         </a>
 
         {/* Zone 2: 4-5 clean single-line text navigation links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
+        <nav className="hidden md:flex items-center gap-5 lg:gap-8 text-sm font-medium text-neutral-600">
           <a
             href="#editor"
             className="hover:text-neutral-900 transition-colors whitespace-nowrap shrink-0"
@@ -76,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStartClick }) => {
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={onStartClick}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-neutral-900 rounded-lg hover:bg-neutral-800 active:scale-98 transition-all whitespace-nowrap shrink-0 shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs font-semibold text-white bg-neutral-900 rounded-lg hover:bg-neutral-800 active:scale-98 transition-all whitespace-nowrap shrink-0 shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
           >
             <Sparkles className="w-3.5 h-3.5 text-sky-400" />
             <span>Start Recoloring</span>

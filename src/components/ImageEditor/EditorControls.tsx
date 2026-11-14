@@ -139,16 +139,23 @@ export const EditorControls: React.FC<EditorControlsProps> = ({
   return (
     <div className="bg-white rounded-2xl border border-neutral-200/90 shadow-md flex flex-col h-full overflow-hidden">
       {/* Top Segmented Navigation Tabs */}
-      <div className="border-b border-neutral-200 bg-neutral-50/70 p-2 overflow-x-auto scrollbar-none">
-        <div className="flex items-center gap-1 min-w-max">
+      <div className="border-b border-neutral-200 bg-neutral-50/70 p-2">
+        <div
+          role="tablist"
+          aria-label="Editor tools"
+          className="flex flex-wrap items-center gap-1 xl:gap-1.5"
+        >
           {tabs.map((tab) => (
             <button
               key={tab.key}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+              className={`flex-auto flex items-center justify-center gap-1 xl:gap-1.5 px-2 xl:px-2.5 py-2 text-[11px] sm:text-xs lg:text-[11px] xl:text-xs font-semibold rounded-lg transition-all cursor-pointer whitespace-nowrap border ${
                 activeTab === tab.key
-                  ? 'bg-white text-neutral-900 shadow-xs border border-neutral-200/80'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/60'
+                  ? 'bg-white text-neutral-900 shadow-xs border-neutral-200/80'
+                  : 'border-transparent text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/60'
               }`}
             >
               {tab.icon}
