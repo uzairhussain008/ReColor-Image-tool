@@ -35,9 +35,6 @@ const LegalModals = lazy(() =>
 const CookieConsent = lazy(() =>
   import('./components/CookieConsent').then((m) => ({ default: m.CookieConsent }))
 );
-const AdPlaceholder = lazy(() =>
-  import('./components/AdPlaceholder').then((m) => ({ default: m.AdPlaceholder }))
-);
 
 export default function App() {
   const [selectedSample, setSelectedSample] = useState<SampleImageItem | null>(null);
@@ -70,16 +67,6 @@ export default function App() {
         />
 
         {/* Deferred Sections: Loaded on viewport intersection to dramatically improve mobile Speed Index */}
-        <DeferredSection fallback={<div className="h-24" />}>
-          <Suspense fallback={<div className="h-24" />}>
-            <AdPlaceholder
-              slotId="below-editor"
-              slotName="Editor Bottom Banner (Adsterra / Display Ads Slot 1)"
-              sizeLabel="Leaderboard (728x90 desktop / 320x50 mobile)"
-            />
-          </Suspense>
-        </DeferredSection>
-
         <DeferredSection sectionId="examples" fallback={<div className="h-96" />}>
           <Suspense fallback={<div className="h-96" />}>
             <BeforeAfterGallery onLoadExample={handleSelectSample} />
@@ -89,16 +76,6 @@ export default function App() {
         <DeferredSection sectionId="features" fallback={<div className="h-80" />}>
           <Suspense fallback={<div className="h-80" />}>
             <FeaturesGrid />
-          </Suspense>
-        </DeferredSection>
-
-        <DeferredSection fallback={<div className="h-32" />}>
-          <Suspense fallback={<div className="h-32" />}>
-            <AdPlaceholder
-              slotId="between-sections"
-              slotName="In-Feed Content Banner (Adsterra / Display Ads Slot 2)"
-              sizeLabel="Responsive Billboard (970x250 / 300x250)"
-            />
           </Suspense>
         </DeferredSection>
 
@@ -117,16 +94,6 @@ export default function App() {
         <DeferredSection sectionId="faq" fallback={<div className="h-80" />}>
           <Suspense fallback={<div className="h-80" />}>
             <FAQ />
-          </Suspense>
-        </DeferredSection>
-
-        <DeferredSection fallback={<div className="h-24" />}>
-          <Suspense fallback={<div className="h-24" />}>
-            <AdPlaceholder
-              slotId="above-footer"
-              slotName="Pre-Footer Leaderboard (Adsterra / Display Ads Slot 3)"
-              sizeLabel="Bottom Leaderboard (728x90 / 320x50)"
-            />
           </Suspense>
         </DeferredSection>
       </main>
